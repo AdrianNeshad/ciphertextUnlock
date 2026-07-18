@@ -1,10 +1,8 @@
 const scrypt =
     require("../kdf/scrypt");
 
-
 const aes128 =
     require("../ciphers/aes128ctr");
-
 
 const {
     verifyEthereumMAC
@@ -12,17 +10,11 @@ const {
     =
     require("../validators/mac");
 
-
-
 exports.decrypt =
     async function (wallet, password) {
-
-
         const c =
             wallet.crypto ||
             wallet.Crypto;
-
-
 
         const key =
             await scrypt(
@@ -30,15 +22,11 @@ exports.decrypt =
                 c.kdfparams
             );
 
-
-
         const ciphertext =
             Buffer.from(
                 c.ciphertext,
                 "hex"
             );
-
-
 
         const valid =
             verifyEthereumMAC(
@@ -47,17 +35,11 @@ exports.decrypt =
                 c.mac
             );
 
-
-
         if (!valid) {
-
             throw Error(
                 "Fel MAC"
             );
-
         }
-
-
 
         const iv =
             Buffer.from(
@@ -65,22 +47,11 @@ exports.decrypt =
                 "hex"
             );
 
-
-
         const decrypted =
             aes128(
-
                 ciphertext,
-
                 key.slice(0, 16),
-
                 iv
-
             );
-
-
-
         return decrypted;
-
-
     }

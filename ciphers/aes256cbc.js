@@ -1,35 +1,21 @@
 const crypto =
     require("crypto");
 
-
 module.exports =
     function (
         data,
         key,
         iv
     ) {
-
-
         const decipher =
             crypto.createDecipheriv(
-
                 "aes-256-cbc",
-
                 key,
-
                 iv
-
             );
 
-
-
         return Buffer.concat([
-
             decipher.update(data),
-
             decipher.final()
-
         ]);
-
-
     }
