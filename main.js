@@ -48,11 +48,11 @@ async function main() {
         try {
             const result = await decryptor.decrypt(wallet, password);
 
-            console.log("\n[+] RÄTT LÖSENORD!");
-            console.log("[+] Resultat:");
+            console.log("\n\u001b[34m[+] RÄTT LÖSENORD!");
+            console.log("[+] Resultat:\u001b[32m");
             console.log(result.toString("utf8"));
 
-            console.log("\nHEX:");
+            console.log("\n\u001B[0mHEX:");
             console.log(result.toString("hex"));
 
             const outputPath = getOutputPath();
