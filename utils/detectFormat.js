@@ -7,10 +7,28 @@ const generic =
 const cryptojs =
     require("../wallets/cryptojs");
 
+const keyMetadataVault =
+    require("../wallets/keyMetadataVault");
+
 module.exports = function (wallet) {
     console.log(
         "\n[+] Identifierar format..."
     );
+
+    if (
+        wallet.cipher &&
+        wallet.iv &&
+        wallet.salt &&
+        wallet.keyMetadata &&
+        wallet.keyMetadata.algorithm
+        ===
+        "PBKDF2"
+    ) {
+        console.log(
+            "[+] PBKDF2-vault-format (cipher/iv/salt/keyMetadata)"
+        );
+        return keyMetadataVault;
+    }
 
     if (
         wallet.cipher &&
