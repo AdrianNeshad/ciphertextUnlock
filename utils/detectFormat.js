@@ -4,7 +4,27 @@ const ethereum =
 const generic =
     require("../wallets/generic");
 
+const cryptojs =
+    require("../wallets/cryptojs");
+
 module.exports = function (wallet) {
+    console.log(
+        "\n[+] Identifierar format..."
+    );
+
+    if (
+        wallet.cipher &&
+        wallet.iv &&
+        wallet.salt &&
+        !wallet.crypto &&
+        !wallet.Crypto
+    ) {
+        console.log(
+            "[+] CryptoJS-format (cipher/iv/salt)"
+        );
+        return cryptojs;
+    }
+
     const crypto =
         wallet.crypto ||
         wallet.Crypto;
@@ -14,10 +34,6 @@ module.exports = function (wallet) {
             "Ingen crypto struktur hittades"
         );
     }
-
-    console.log(
-        "\n[+] Identifierar format..."
-    );
 
     console.log(
         "Cipher:",
