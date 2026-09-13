@@ -1,5 +1,4 @@
-const keccak =
-    require("keccak");
+const keccak256 = require("../utils/keccak256");
 
 function verifyEthereumMAC(
     key,
@@ -7,24 +6,13 @@ function verifyEthereumMAC(
     storedMac
 ) {
     const calculated =
-        keccak("keccak256")
-            .update(
-                Buffer.concat([
-                    key.slice(16, 32),
-                    ciphertext
-                ])
-            )
-            .digest("hex");
+        keccak256(
+            Buffer.concat([
+                key.slice(16, 32),
+                ciphertext
+            ])
+        ).toString("hex");
 
-    console.log(
-        "[+] MAC calculated:",
-        calculated
-    );
-
-    console.log(
-        "[+] MAC stored:",
-        storedMac
-    );
     return calculated === storedMac;
 }
 

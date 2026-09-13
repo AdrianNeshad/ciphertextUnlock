@@ -16,9 +16,6 @@
     "url": "https://github.com/AdrianNeshad/ciphertextUnlock/issues"
   },
   "homepage": "https://github.com/AdrianNeshad/ciphertextUnlock#readme",
-  "dependencies": {
-    "keccak": "^3.0.4",
-    "scrypt-js": "^3.0.1"
-  },
+  "dependencies": {},
   "description": ""
 }

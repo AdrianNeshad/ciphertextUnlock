@@ -1,15 +1,11 @@
 const crypto = require("crypto");
-const keccak = require("keccak");
+const keccak256 = require("../utils/keccak256");
 
 const aes = require("../ciphers/aes");
 
 // Ethereum presale-plånbok (förköpet 2014). Formatet saknar MAC men
 // innehåller den förväntade adressen i "ethaddr", så korrektheten
 // verifieras genom att härleda adressen ur den dekrypterade nyckeln.
-
-function keccak256(buf) {
-    return keccak("keccak256").update(buf).digest();
-}
 
 // Härled Ethereum-adress (20 byte, hex) ur en privat nyckel (32 byte).
 function addressFromPrivateKey(privateKey) {

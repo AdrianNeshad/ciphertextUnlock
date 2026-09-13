@@ -6,10 +6,20 @@
 
 The repository already includes a `encrypted.json` file and the corresponding password in `passwords.txt` to test out the script.
 
+### **Requirements**
+
+Only **Node.js** (v12+). There are **no dependencies** — no `npm install`, no native build, no network. Clone the repo and run. Everything (including scrypt and keccak256) is implemented with Node built-ins or bundled pure-JS.
+
 ### **Run the script**
 
 ```
 node main.js
+```
+
+The brute-force runs in parallel across all CPU cores using `worker_threads` and stops as soon as a password matches. Optional overrides via environment variables:
+
+```
+WORKERS=4 WALLET_FILE=mywallet.json PASSWORDS_FILE=list.txt node main.js
 ```
 
 ### **Supported formats & algorithms**
