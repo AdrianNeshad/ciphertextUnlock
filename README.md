@@ -12,6 +12,28 @@ The repository already includes a `encrypted.json` file and the corresponding pa
 node main.js
 ```
 
+### **Supported formats & algorithms**
+
+The format is detected automatically from the structure of `encrypted.json` (see [`utils/detectFormat.js`](utils/detectFormat.js)).
+
+**Ethereum keystores — all variants:**
+
+| Format | Detected by | Key derivation (KDF) | Cipher | Integrity / password check |
+| --- | --- | --- | --- | --- |
+| **Web3 Secret Storage V3** <br>(geth, MetaMask, MyEtherWallet, TrustWallet, UTC-- files) | `crypto.ciphertext` + `crypto.kdf` | `scrypt` (`n`/`r`/`p`/`dklen`) **and** `pbkdf2` (`c`, `prf: hmac-sha256`) | `aes-128-ctr`, `aes-256-ctr`, `aes-128-cbc`, `aes-256-cbc` | `keccak256(key[16:32] ‖ ciphertext)` MAC |
+| **Web3 Secret Storage V1** <br>(older C++/Mist exports) | `Crypto.KeyHeader` / `Crypto.CipherText` | `scrypt` **and** `pbkdf2` (from `KeyHeader.KdfParams`) | `aes-128-cbc` | `keccak256(key[16:32] ‖ ciphertext)` MAC |
+| **Ethereum presale wallet** <br>(2014 pre-sale) | `encseed` + `ethaddr` | `pbkdf2-hmac-sha256`, 2000 iterations (password used as both password and salt) | `aes-128-cbc` | secp256k1 address derived from the key is compared to `ethaddr` (no MAC in this format) |
+
+All Ethereum variants support `crypto` and `Crypto` spelling, and AES-128 vs AES-256 key length is selected automatically from the cipher name.
+
+**Other (non-Ethereum) formats also handled:**
+
+| Format | Detected by | Key derivation (KDF) | Cipher | Integrity / password check |
+| --- | --- | --- | --- | --- |
+| **PBKDF2 keyMetadata vault** | `cipher`/`iv`/`salt` + `keyMetadata.algorithm = "PBKDF2"` | `pbkdf2-sha256` (iterations from `keyMetadata.params`) | `aes-256-gcm`, falls back to `aes-256-cbc` | GCM authentication tag |
+| **CryptoJS blob** | `cipher`/`iv`/`salt`, no `crypto` struct | `pbkdf2` — hash (`sha1`/`sha256`), iteration count and key size are brute-forced | `aes-128-cbc` / `aes-256-cbc` | PKCS#7 padding + printable-text heuristic |
+| **Generic AES** | fallback for any other `crypto` struct | — | AES | — |
+
 ### **Användaravtal:**
 
 *   Vid lyckad dekryptering av ciphertext är användaren skyldig Adrian (repository owner) en öl.
